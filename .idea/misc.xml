@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="MavenProjectsManager">
+    <option name="originalFiles">
+      <list>
+        <option value="$PROJECT_DIR$/../Lending-Application/api-gateway/pom.xml" />
+        <option value="$PROJECT_DIR$/../Lending-Application/Authentication/pom.xml" />
+        <option value="$PROJECT_DIR$/../Lending-Application/service-registry/pom.xml" />
+        <option value="$PROJECT_DIR$/../Lending-Application/user-profile/pom.xml" />
+      </list>
+    </option>
+  </component>
+  <component name="ProjectRootManager" version="2" languageLevel="JDK_19" default="true" project-jdk-name="19" project-jdk-type="JavaSDK">
+    <output url="file://$PROJECT_DIR$/out" />
+  </component>
+  <component name="ProjectType">
+    <option name="id" value="jpab" />
+  </component>
+</project>
