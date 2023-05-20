@@ -23,7 +23,6 @@ public class UserServiceImpl implements UserService {
                         .lastName(userRequest.getLastName())
                         .phoneNumber(userRequest.getPhoneNumber())
                         .email(userRequest.getEmail())
-                        .gender(Gender.valueOf(userRequest.getGender()))
                         .build());
         return UserSavedResponse.builder()
                 .id(user.getId())
