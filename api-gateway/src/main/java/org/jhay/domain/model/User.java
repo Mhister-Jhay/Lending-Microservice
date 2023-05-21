@@ -2,6 +2,7 @@ package org.jhay.domain.model;
 
 import jakarta.persistence.*;
 import lombok.*;
+import org.jhay.domain.enums.Gender;
 
 @Getter
 @Setter
@@ -21,4 +22,8 @@ public class User {
     private String lastName;
     @Column(unique = true,nullable = false)
     private String email;
+    @Column(unique = true,nullable = false)
+    private String phoneNumber;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
 }

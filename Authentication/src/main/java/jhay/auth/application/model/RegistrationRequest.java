@@ -2,6 +2,7 @@ package jhay.auth.application.model;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
+import jhay.auth.domain.enums.Gender;
 import lombok.*;
 
 @Getter
@@ -19,5 +20,9 @@ public class RegistrationRequest {
     private String email;
     @NotBlank(message = "Password must not be blank")
     private String password;
+    @NotBlank(message = "Phone Number must not be blank")
+    private String phoneNumber;
+    @NotBlank(message = "Gender must not be blank")
+    private String gender;
 
 }

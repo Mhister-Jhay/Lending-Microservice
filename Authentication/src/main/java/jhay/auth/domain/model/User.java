@@ -1,6 +1,8 @@
 package jhay.auth.domain.model;
 
 import jakarta.persistence.*;
+import jhay.auth.domain.enums.Gender;
+import jhay.auth.domain.enums.Role;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.NaturalId;
@@ -31,10 +33,15 @@ public class User implements UserDetails {
     @NaturalId(mutable = true)
     @Column(nullable = false,unique = true)
     private String email;
+    @NaturalId(mutable = true)
+    @Column(nullable = false,unique = true)
+    private String phoneNumber;
     @Column(nullable = false)
     private String password;
     @Enumerated(EnumType.STRING)
     private Role role;
+    @Enumerated(EnumType.STRING)
+    private Gender gender;
     private Boolean isLocked = false;
     private Boolean isEnabled = false;
 

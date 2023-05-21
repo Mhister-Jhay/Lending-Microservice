@@ -27,6 +27,8 @@ public class AuthEventHandler{
                     .email(userResponse.getEmail())
                     .lastName(userResponse.getLastName())
                     .firstName(userResponse.getFirstName())
+                    .phoneNumber(userResponse.getPhoneNumber())
+                    .gender(userResponse.getGender())
                     .build());
         }
         System.out.println("User Registered Successfully");

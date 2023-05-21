@@ -2,6 +2,7 @@ package org.jhay.dto;
 
 import lombok.Builder;
 import lombok.Data;
+import org.jhay.domain.enums.Gender;
 
 @Data
 @Builder
@@ -10,4 +11,6 @@ public class UserResponse {
     private String firstName;
     private String lastName;
     private String email;
+    private String phoneNumber;
+    private Gender gender;
 }

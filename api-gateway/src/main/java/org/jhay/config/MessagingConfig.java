@@ -14,10 +14,10 @@ import org.springframework.context.annotation.Configuration;
 @Configuration
 public class MessagingConfig {
     private static final String TOPIC1 = "userLoggedInTopic";
-    private static final String QUEUE_NAME1 = "user.loggedIn";
+    private static final String QUEUE_NAME1 = "user.loggedIn.gateway";
 
     private static final String TOPIC2 = "userRegisteredTopic";
-    private static final String QUEUE_NAME2 = "user.registered";
+    private static final String QUEUE_NAME2 = "user.registered.gateway";
 
     @Bean
     public Queue userLoggedInQueue(){

@@ -1,21 +1,18 @@
 package jhay.auth.domain.service.registration;
 import jakarta.servlet.http.HttpServletRequest;
-import jhay.auth.application.model.AuthResponse;
 import jhay.auth.application.model.RegistrationRequest;
 import jhay.auth.application.model.UserResponse;
 import jhay.auth.common.event.RegistrationEvent;
 import jhay.auth.common.security.jwt.JwtAuthProvider;
-import jhay.auth.common.security.jwt.JwtToken;
 import jhay.auth.common.security.jwt.JwtTokenRepository;
 import jhay.auth.common.utils.EmailUtils;
-import jhay.auth.domain.model.Role;
+import jhay.auth.domain.enums.Gender;
+import jhay.auth.domain.enums.Role;
 import jhay.auth.domain.model.User;
 import jhay.auth.domain.service.notification.NotificationService;
 import jhay.auth.domain.service.user.UserServiceImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
@@ -36,9 +33,11 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .firstName(registerRequest.getFirstName())
                 .lastName(registerRequest.getLastName())
                 .email(registerRequest.getEmail())
+                .phoneNumber(registerRequest.getPhoneNumber())
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(Role.USER)
-                .isEnabled(true)
+                .gender(Gender.valueOf(registerRequest.getGender().toUpperCase()))
+                .isEnabled(false)
                 .isLocked(false)
                 .build();
         User theUser = userService.saveUser(user);
@@ -47,6 +46,8 @@ public class RegistrationServiceImpl implements RegistrationService {
                         .firstName(theUser.getFirstName())
                         .lastName(theUser.getLastName())
                         .email(theUser.getEmail())
+                        .phoneNumber(theUser.getPhoneNumber())
+                        .gender(theUser.getGender())
                         .build());
         publisher.publishEvent(new RegistrationEvent(user, EmailUtils.applicationUrl(request)));
         return "Registration Successful, Please Check Your Mail for Verification Link";
