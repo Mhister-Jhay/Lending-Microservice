@@ -37,7 +37,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(Role.USER)
                 .gender(Gender.valueOf(registerRequest.getGender().toUpperCase()))
-                .isEnabled(false)
+                .isEnabled(true)
                 .isLocked(false)
                 .build();
         User theUser = userService.saveUser(user);

@@ -39,6 +39,7 @@ public class AuthEventHandler{
         if(authRepository.existsByAssignedTo(authResponse.getAssignedTo())){
             Auth auth = authRepository.findByAssignedTo(authResponse.getAssignedTo());
             auth.setAccessToken(auth.getAccessToken());
+            System.out.println(auth.getAccessToken()+"  Access Token");
             auth.setValidTill(authResponse.getValidTill());
             authRepository.save(auth);
         }else{
