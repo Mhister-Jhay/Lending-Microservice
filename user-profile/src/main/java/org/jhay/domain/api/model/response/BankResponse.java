@@ -9,8 +9,8 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class SaveAccountResponse {
+public class BankResponse {
+    private Boolean status;
     private String message;
-    private String accountBank;
-    private String accountName;
+    private AccountResponse data;
 }

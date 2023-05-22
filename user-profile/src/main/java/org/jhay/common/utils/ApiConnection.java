@@ -10,9 +10,10 @@ import org.springframework.web.client.RestTemplate;
 import java.time.Duration;
 @Component
 public class ApiConnection {
-    public <T> String connectAndPost(T requestBody, String requestPath) {
+    public <T, R> R connectAndPost(T requestBody,String requestPath, Class<R> responseType) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth("FLWSECK_TEST-7db74521eb0a68c0ef50afbf000cab42-X");
+        headers.setBearerAuth("sk_test_fb95dd7bf1d981b505baafd82f301cbec52cae28");
+        headers.setContentType(MediaType.APPLICATION_JSON);
         /*
          *  Creating HttpEntity to hold the requestBody and the headers
          *  which will be exchanged for response via the rest template
@@ -32,7 +33,7 @@ public class ApiConnection {
             /*
              *Making the HttpCall using the Spring's Rest Template
              */
-            ResponseEntity<String> response = restTemplate.exchange(requestPath, HttpMethod.POST, requestEntity, String.class);
+            ResponseEntity<R> response = restTemplate.exchange(requestPath, HttpMethod.POST, requestEntity, responseType);
             return response.getBody();
         } catch (HttpClientErrorException | HttpServerErrorException e) {
             e.printStackTrace();
@@ -42,7 +43,8 @@ public class ApiConnection {
 
     public String connectAndGet(String requestPath) {
         HttpHeaders headers = new HttpHeaders();
-        headers.setBearerAuth("FLWSECK_TEST-7db74521eb0a68c0ef50afbf000cab42-X");
+        headers.setBearerAuth("sk_test_fb95dd7bf1d981b505baafd82f301cbec52cae28");
+        headers.setContentType(MediaType.APPLICATION_JSON);
         /*
          *  Creating HttpEntity to hold the requestBody and the headers
          *  which will be exchanged for response via the rest template

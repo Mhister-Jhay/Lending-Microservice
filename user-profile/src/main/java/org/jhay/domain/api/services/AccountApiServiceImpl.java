@@ -11,9 +11,9 @@ import org.jhay.common.utils.ConnectionString;
 import org.jhay.common.utils.DateUtils;
 import org.jhay.domain.api.model.Banks;
 import org.jhay.domain.api.model.request.AccountRequest;
-import org.jhay.domain.api.model.request.SaveAccountRequest;
 import org.jhay.domain.api.model.request.VerifyAccountRequest;
 import org.jhay.domain.api.model.response.AccountResponse;
+import org.jhay.domain.api.model.response.BankResponse;
 import org.jhay.domain.api.model.response.SaveAccountResponse;
 import org.jhay.domain.api.model.response.VerifyAccountResponse;
 import org.jhay.domain.api.repository.BankRepository;
@@ -52,30 +52,26 @@ public class AccountApiServiceImpl implements ApplicationRunner {
         System.out.println(banksList);
     }
 
-    public SaveAccountResponse saveUserAccount(SaveAccountRequest request) throws ParseException {
+    public SaveAccountResponse saveUserAccount(VerifyAccountRequest request) throws ParseException {
         User user = userRepository.findByEmail(request.getEmail());
-        VerifyAccountRequest verifyAccountRequest = VerifyAccountRequest.builder()
-                .account_bank(request.getBankCode())
-                .account_number(request.getAccountNumber())
-                .build();
         AccountRequest accountRequest = AccountRequest.builder()
-                .account_bank(request.getBankCode())
-                .account_number(request.getAccountNumber())
-                .business_email(user.getEmail())
-                .business_mobile(user.getPhoneNumber())
-                .business_name(user.getFirstName()+" "+user.getLastName())
-                .country("NG")
-                .split_type("percentage")
-                .split_value(0.1)
+                .business_name(verifyUserAccount(request))
+                .account_number(request.getAccount_number())
+                .settlement_bank(request.getAccount_bank())
+                .percentage_charge(0.1)
+                .description("Creation of Sub Account for user with email "+ user.getEmail())
+                .primary_contact_email(user.getEmail())
+                .primary_contact_phone(user.getPhoneNumber())
                 .build();
-        String savedAccount = connection.connectAndPost(accountRequest,ConnectionString.SAVE_ACCOUNT);
-        AccountResponse response = new ObjectMapper().convertValue(new JSONParser(Objects.requireNonNull(savedAccount))
-                .object().get("data"), new TypeReference<AccountResponse>() {});
+        BankResponse bankResponse = connection.connectAndPost(accountRequest,ConnectionString.SAVE_ACCOUNT, BankResponse.class);
+        System.out.println(bankResponse);
+        AccountResponse response = bankResponse.getData();
         Account account = accountRepository.save(Account.builder()
-                .accountName(response.getFull_name())
+                .id(response.getSubaccount_code())
+                .accountName(response.getBusiness_name())
                 .accountNumber(response.getAccount_number())
-                .bankCode(request.getBankCode())
-                .bankName(response.getBank_name())
+                .bankCode(request.getAccount_bank())
+                .bankName(response.getSettlement_bank())
                 .createdAt(DateUtils.saveLocalDate(LocalDateTime.now()))
                 .user(user)
                 .build());
@@ -86,7 +82,7 @@ public class AccountApiServiceImpl implements ApplicationRunner {
                 .build();
     }
     public String verifyUserAccount(VerifyAccountRequest request) throws ParseException {
-        String userAccount = connection.connectAndPost(request,ConnectionString.VERIFY_ACCOUNT);
+        String userAccount = connection.connectAndGet(ConnectionString.verifyAccount(request));
         VerifyAccountResponse response = new ObjectMapper().convertValue(new JSONParser(Objects.requireNonNull(userAccount))
                 .object().get("data"), new TypeReference<VerifyAccountResponse>() {});
         System.out.println(response.getAccount_name());

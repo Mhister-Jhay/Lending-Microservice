@@ -16,6 +16,18 @@ spring:
     port: 5672
   application:
     name: auth-service
+  datasource:
+    url: jdbc:postgresql://localhost:5432/auth
+    username: postgres
+    password: 1234
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    properties:
+      hibernate:
+        format_sql: true
 server:
   port: 8081
 eureka:

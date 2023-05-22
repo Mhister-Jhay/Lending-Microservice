@@ -3,7 +3,7 @@ package org.jhay.application.controller;
 import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.ParseException;
 import org.jhay.application.model.response.ApiResponse;
-import org.jhay.domain.api.model.request.SaveAccountRequest;
+import org.jhay.domain.api.model.request.VerifyAccountRequest;
 import org.jhay.domain.api.model.response.SaveAccountResponse;
 import org.jhay.domain.api.services.AccountApiServiceImpl;
 import org.springframework.http.HttpStatus;
@@ -20,7 +20,8 @@ public class UserController {
     private final AccountApiServiceImpl accountApiService;
 
     @PostMapping("/save-account")
-    public ResponseEntity<ApiResponse<SaveAccountResponse>> saveUserAccount(@RequestBody SaveAccountRequest request) throws ParseException {
+    public ResponseEntity<ApiResponse<SaveAccountResponse>> saveUserAccount(@RequestBody VerifyAccountRequest request) throws ParseException {
+        System.out.println(request.getAccount_bank()+"    Bank code");
         ApiResponse<SaveAccountResponse> apiResponse = new ApiResponse<>(accountApiService.saveUserAccount(request));
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
