@@ -22,4 +22,39 @@ public class UserProfileExceptionHandler {
                 .build();
         return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> userNotFound(UserNotFoundException e,
+                                                              HttpServletRequest request){
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .time(DateUtils.saveLocalDate(LocalDateTime.now()))
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .build();
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+    }
+
+    @ExceptionHandler(AddressAlreadyExistException.class)
+    public ResponseEntity<ExceptionResponse> userAddressExist(AddressAlreadyExistException e,
+                                                          HttpServletRequest request){
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .time(DateUtils.saveLocalDate(LocalDateTime.now()))
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .build();
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(AddressNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> userAddressNotFound(AddressNotFoundException e,
+                                                          HttpServletRequest request){
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .time(DateUtils.saveLocalDate(LocalDateTime.now()))
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .build();
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+    }
 }

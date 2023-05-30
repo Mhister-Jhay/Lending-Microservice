@@ -8,10 +8,8 @@ import org.springframework.context.ApplicationEvent;
 @Setter
 public class RegistrationEvent extends ApplicationEvent {
     private User user;
-    private String applicationUrl;
-    public RegistrationEvent(User user, String applicationUrl) {
+    public RegistrationEvent(User user) {
         super(user);
         this.user = user;
-        this.applicationUrl = applicationUrl;
     }
 }

@@ -16,9 +16,44 @@ public class MessagingConfig {
 
     private static final String TOPIC = "userRegisteredTopic";
     private static final String QUEUE_NAME = "user.registered.profile";
+    private static final String TOPIC2 = "userAccountTopic";
+    private static final String QUEUE_NAME_2 = "account.saved";
+    private static final String TOPIC3 = "userAddressTopic";
+    private static final String QUEUE_NAME_3 = "address.saved";
     @Bean
     public Queue userRegisteredQueue(){
         return new Queue(QUEUE_NAME, false);
+    }
+
+    @Bean
+    public Queue accountSavedQueue(){
+        return new Queue(QUEUE_NAME_2, false);
+    }
+    @Bean
+    public Queue addressSavedQueue(){
+        return new Queue(QUEUE_NAME_3, false);
+    }
+    @Bean
+    public TopicExchange accountSavedTopic(){
+        return new TopicExchange(TOPIC2);
+    }
+    @Bean
+    public TopicExchange addressSavedTopic(){
+        return new TopicExchange(TOPIC3);
+    }
+
+    @Bean
+    public com.rabbitmq.client.ConnectionFactory connectionFactory(){
+        return new com.rabbitmq.client.ConnectionFactory();
+    }
+
+    @Bean
+    public Binding accountSavedBinding(Queue accountSavedQueue, TopicExchange accountSavedTopic){
+        return BindingBuilder.bind(accountSavedQueue).to(accountSavedTopic).with("account.#");
+    }
+    @Bean
+    public Binding addressSavedBinding(Queue addressSavedQueue,TopicExchange addressSavedTopic){
+        return BindingBuilder.bind(addressSavedQueue).to(addressSavedTopic).with("address.#");
     }
     @Bean
     public TopicExchange userRegisteredTopic(){

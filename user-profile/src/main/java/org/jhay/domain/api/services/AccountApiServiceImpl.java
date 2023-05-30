@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.jhay.application.model.request.BankRequest;
+import org.jhay.common.exceptions.UserNotFoundException;
 import org.jhay.common.utils.ApiConnection;
 import org.jhay.common.utils.ConnectionString;
 import org.jhay.common.utils.DateUtils;
@@ -21,6 +22,7 @@ import org.jhay.domain.model.Account;
 import org.jhay.domain.model.User;
 import org.jhay.domain.repository.AccountRepository;
 import org.jhay.domain.repository.UserRepository;
+import org.jhay.domain.service.notification.NotificationService;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
 import org.springframework.stereotype.Service;
@@ -32,12 +34,12 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
-public class AccountApiServiceImpl implements ApplicationRunner {
-    private final RestTemplate restTemplate;
+public class AccountApiServiceImpl implements AccountApiService, ApplicationRunner {
     private final BankRepository bankRepository;
     private final UserRepository userRepository;
     private final AccountRepository accountRepository;
     private final ApiConnection connection;
+    private final NotificationService notificationService;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -52,8 +54,9 @@ public class AccountApiServiceImpl implements ApplicationRunner {
         System.out.println(banksList);
     }
 
-    public SaveAccountResponse saveUserAccount(VerifyAccountRequest request) throws ParseException {
-        User user = userRepository.findByEmail(request.getEmail());
+    @Override
+    public SaveAccountResponse saveUserAccount(Long userId, VerifyAccountRequest request) throws ParseException {
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
         AccountRequest accountRequest = AccountRequest.builder()
                 .business_name(verifyUserAccount(request))
                 .account_number(request.getAccount_number())
@@ -75,17 +78,20 @@ public class AccountApiServiceImpl implements ApplicationRunner {
                 .createdAt(DateUtils.saveLocalDate(LocalDateTime.now()))
                 .user(user)
                 .build());
+        notificationService.sendAccountMessage("Account Saved Successfully");
         return SaveAccountResponse.builder()
                 .message("Account Saved Successfully")
                 .accountBank(account.getBankName())
                 .accountName(account.getAccountName())
                 .build();
     }
-    public String verifyUserAccount(VerifyAccountRequest request) throws ParseException {
+
+    private String verifyUserAccount(VerifyAccountRequest request) throws ParseException {
         String userAccount = connection.connectAndGet(ConnectionString.verifyAccount(request));
         VerifyAccountResponse response = new ObjectMapper().convertValue(new JSONParser(Objects.requireNonNull(userAccount))
                 .object().get("data"), new TypeReference<VerifyAccountResponse>() {});
         System.out.println(response.getAccount_name());
         return response.getAccount_name();
     }
+
 }

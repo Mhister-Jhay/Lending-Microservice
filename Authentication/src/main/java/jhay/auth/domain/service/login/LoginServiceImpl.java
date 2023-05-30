@@ -1,6 +1,5 @@
 package jhay.auth.domain.service.login;
 
-import jakarta.servlet.http.HttpServletRequest;
 import jhay.auth.application.model.AuthResponse;
 import jhay.auth.application.model.LoginRequest;
 import jhay.auth.common.event.ForgotPasswordEvent;
@@ -9,7 +8,6 @@ import jhay.auth.common.exception.UserNotVerifiedException;
 import jhay.auth.common.security.jwt.JwtAuthProvider;
 import jhay.auth.common.security.jwt.JwtToken;
 import jhay.auth.common.security.jwt.JwtTokenRepository;
-import jhay.auth.common.utils.EmailUtils;
 import jhay.auth.domain.model.User;
 import jhay.auth.domain.model.VerificationToken;
 import jhay.auth.domain.service.notification.NotificationService;
@@ -17,6 +15,7 @@ import jhay.auth.domain.service.user.UserServiceImpl;
 import jhay.auth.repository.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
+import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -35,6 +34,7 @@ public class LoginServiceImpl implements LoginService {
     private final JwtTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenRepository verificationTokenRepository;
+    private final AuthenticationManager authenticationManager;
 
     @Override
     public AuthResponse loginUser(LoginRequest loginRequest){
@@ -66,9 +66,9 @@ public class LoginServiceImpl implements LoginService {
     }
 
     @Override
-    public String forgotPassword(String email, HttpServletRequest request){
+    public String forgotPassword(String email){
         User user = userService.getUserByEmail(email);
-        publisher.publishEvent(new ForgotPasswordEvent(user, EmailUtils.applicationUrl(request)));
+        publisher.publishEvent(new ForgotPasswordEvent(user));
         return "Please Check your mail for new Password reset Link";
     }
 

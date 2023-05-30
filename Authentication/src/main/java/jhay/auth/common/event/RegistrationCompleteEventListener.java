@@ -27,7 +27,7 @@ public class RegistrationCompleteEventListener implements
         // 3. Save the token in the database
         tokenValidationService.saveVerificationToken(verifyToken,user);
         // 4. Build the verification link for the user
-        String url = event.getApplicationUrl()+"/register/verify-email?token="+verifyToken;
+        String url = "http://localhost:8080/auth/verify-email?token="+verifyToken;
         // 5. Actually send the mail
         try {
             sendVerificationEmail(url,user);
@@ -39,7 +39,7 @@ public class RegistrationCompleteEventListener implements
         String subject = "Email Verification";
         String senderName = "Pagora Inc.";
         String mailContent = "<p> Hi, " + theUser.getFirstName() + ", </p>" +
-                "<p>Thank you for registering with us, " + "" +
+                "<p>Thank you for registering with us, " +
                 "Please, follow the link below to complete your registration. </p>" +
                 "<a href=\"" + url + "\"> Verify your email to activate your account</a>" +
                 "<p> Thank you <br>" + senderName;

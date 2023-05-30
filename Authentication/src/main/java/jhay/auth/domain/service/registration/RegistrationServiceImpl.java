@@ -1,11 +1,8 @@
 package jhay.auth.domain.service.registration;
-import jakarta.servlet.http.HttpServletRequest;
+
 import jhay.auth.application.model.RegistrationRequest;
 import jhay.auth.application.model.UserResponse;
 import jhay.auth.common.event.RegistrationEvent;
-import jhay.auth.common.security.jwt.JwtAuthProvider;
-import jhay.auth.common.security.jwt.JwtTokenRepository;
-import jhay.auth.common.utils.EmailUtils;
 import jhay.auth.domain.enums.Gender;
 import jhay.auth.domain.enums.Role;
 import jhay.auth.domain.model.User;
@@ -21,13 +18,11 @@ import org.springframework.stereotype.Component;
 public class RegistrationServiceImpl implements RegistrationService {
     private final PasswordEncoder passwordEncoder;
     private final UserServiceImpl userService;
-    private final JwtAuthProvider authProvider;
     private final NotificationService notificationService;
-    private final JwtTokenRepository jwtTokenRepository;
     private final ApplicationEventPublisher publisher;
 
     @Override
-    public String registerUser(RegistrationRequest registerRequest, HttpServletRequest request){
+    public String registerUser(RegistrationRequest registerRequest){
         userService.verifyUserExistence(registerRequest.getEmail());
         User user = User.builder()
                 .firstName(registerRequest.getFirstName())
@@ -37,7 +32,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(Role.USER)
                 .gender(Gender.valueOf(registerRequest.getGender().toUpperCase()))
-                .isEnabled(true)
+                .isEnabled(false)
                 .isLocked(false)
                 .build();
         User theUser = userService.saveUser(user);
@@ -49,7 +44,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                         .phoneNumber(theUser.getPhoneNumber())
                         .gender(theUser.getGender())
                         .build());
-        publisher.publishEvent(new RegistrationEvent(user, EmailUtils.applicationUrl(request)));
+        publisher.publishEvent(new RegistrationEvent(user));
         return "Registration Successful, Please Check Your Mail for Verification Link";
     }
 }

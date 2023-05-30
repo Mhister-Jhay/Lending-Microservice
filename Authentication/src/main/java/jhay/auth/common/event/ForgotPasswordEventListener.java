@@ -28,7 +28,7 @@ public class ForgotPasswordEventListener implements
         // 3. Save the token in the database
         tokenValidationService.saveVerificationToken(passwordToken,user);
         // 4. Build the verification link for the user
-        String url = event.getApplicationUrl()+"/verify-reset-password?token="+passwordToken;
+        String url = "http://localhost:8080/auth/verify-reset-password?token="+passwordToken;
         // 5. Actually send the mail
         try {
             sendVerificationEmail(url,user);
