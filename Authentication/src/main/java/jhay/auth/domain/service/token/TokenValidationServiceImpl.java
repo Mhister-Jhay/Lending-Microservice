@@ -33,7 +33,7 @@ public class TokenValidationServiceImpl implements TokenValidationService{
         }
         if(verificationToken.getExpirationTime().before(new Date())){
             return "Please click on the link to get a new verification mail : "+
-                    "http://localhost:8080/register/request-new-verification-token?email="+user.getEmail();
+                    "http://localhost:8080/auth/request-new-verification-token?email="+user.getEmail();
         }
         user.setIsEnabled(true);
         if(user.getIsEnabled()){

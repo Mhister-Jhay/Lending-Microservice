@@ -36,19 +36,13 @@ public class AuthEventHandler{
     }
     public void handleUserLogin(String loginDetails){
         AuthResponse authResponse = GSON.fromJson(loginDetails,AuthResponse.class);
-        if(authRepository.existsByAssignedTo(authResponse.getAssignedTo())){
-            Auth auth = authRepository.findByAssignedTo(authResponse.getAssignedTo());
-            auth.setAccessToken(auth.getAccessToken());
-            System.out.println(auth.getAccessToken()+"  Access Token");
-            auth.setValidTill(authResponse.getValidTill());
-            authRepository.save(auth);
-        }else{
-            authRepository.save(Auth.builder()
+            Auth auth = Auth.builder()
                     .accessToken(authResponse.getAccessToken())
                     .assignedTo(authResponse.getAssignedTo())
-                    .validTill(authResponse.getValidTill())
-                    .build());
-        }
+                    .isExpired(authResponse.isExpired())
+                    .isRevoked(authResponse.isRevoked())
+                    .build();
+            authRepository.save(auth);
         System.out.println("Token saved successfully");
     }
 }

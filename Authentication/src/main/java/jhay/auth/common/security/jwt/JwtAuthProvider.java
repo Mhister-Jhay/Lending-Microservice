@@ -7,6 +7,7 @@ import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.xml.bind.DatatypeConverter;
 import jhay.auth.common.utils.DateUtils;
+import jhay.auth.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,11 +15,13 @@ import org.springframework.stereotype.Component;
 
 import java.security.Key;
 import java.util.Date;
+import java.util.List;
 import java.util.function.Function;
 
 @Component
 @RequiredArgsConstructor
 public class JwtAuthProvider {
+    private final JwtTokenRepository jwtTokenRepository;
     private String generateSecret(){
         return DatatypeConverter.printBase64Binary(new byte[512/8]);
     }
@@ -30,6 +33,14 @@ public class JwtAuthProvider {
                 .setExpiration(DateUtils.getExpirationDate())
                 .signWith(getSignatureKey(), SignatureAlgorithm.HS512)
                 .compact();
+    }
+    public void revokeAllUserTokens(User user){
+        List<JwtToken> jwtTokens = jwtTokenRepository.findAllByUser(user);
+        jwtTokens.forEach(jwtToken -> {
+            jwtToken.setExpired(true);
+            jwtToken.setRevoked(true);
+        });
+        jwtTokenRepository.saveAll(jwtTokens);
     }
     private Key getSignatureKey(){
         byte[] keyBytes = Decoders.BASE64.decode(generateSecret());

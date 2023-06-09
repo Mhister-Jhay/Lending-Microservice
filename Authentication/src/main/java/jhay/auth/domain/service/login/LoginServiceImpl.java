@@ -15,7 +15,6 @@ import jhay.auth.domain.service.user.UserServiceImpl;
 import jhay.auth.repository.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
-import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -31,11 +30,8 @@ public class LoginServiceImpl implements LoginService {
     private final JwtAuthProvider authProvider;
     private final JwtTokenRepository jwtTokenRepository;
     private final ApplicationEventPublisher publisher;
-    private final JwtTokenRepository tokenRepository;
     private final PasswordEncoder passwordEncoder;
     private final VerificationTokenRepository verificationTokenRepository;
-    private final AuthenticationManager authenticationManager;
-
     @Override
     public AuthResponse loginUser(LoginRequest loginRequest){
         User user = userService.getUserByEmail(loginRequest.getEmail());
@@ -43,26 +39,16 @@ public class LoginServiceImpl implements LoginService {
             throw new UserNotVerifiedException(user.getEmail());
         }
         if(!passwordEncoder.matches(loginRequest.getPassword(),user.getPassword())){
-            throw new BadCredentialsException("Wrong password, Check enter your correct password");
+            throw new BadCredentialsException("Incorrect Credentials");
         }
         Authentication authentication = new UsernamePasswordAuthenticationToken(
                 user.getEmail(),user.getPassword());
         String accessToken = authProvider.generateToken(authentication);
         JwtToken jwtToken = new JwtToken(accessToken);
-        if(tokenRepository.existsByUser(user)){
-            JwtToken existingToken = tokenRepository.findByUser(user);
-            existingToken.setAccessToken(jwtToken.getAccessToken());
-            existingToken.setExpiresAt(jwtToken.getExpiresAt());
-            existingToken.setGeneratedAt(jwtToken.getGeneratedAt());
-            AuthResponse authResponse = new AuthResponse(jwtTokenRepository.save(existingToken));
-            notificationService.sendLoginMessage(authResponse);
-            return authResponse;
-        }else{
-            jwtToken.setUser(user);
-            AuthResponse authResponse = new AuthResponse(jwtTokenRepository.save(jwtToken));
-            notificationService.sendLoginMessage(authResponse);
-            return authResponse;
-        }
+        authProvider.revokeAllUserTokens(user);
+        AuthResponse authResponse = new AuthResponse(jwtTokenRepository.save(jwtToken));
+        notificationService.sendLoginMessage(authResponse);
+        return authResponse;
     }
 
     @Override

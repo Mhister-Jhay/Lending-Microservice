@@ -24,7 +24,9 @@ public class Auth {
     @Column(unique = true,nullable = false)
     private String assignedTo;
     @Column(nullable = false)
-    private Date validTill;
+    private boolean isExpired;
+    @Column(nullable = false)
+    private boolean isRevoked;
 
     @Override
     public boolean equals(Object o) {

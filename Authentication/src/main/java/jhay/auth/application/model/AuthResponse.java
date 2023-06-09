@@ -13,11 +13,13 @@ import java.util.Date;
 public class AuthResponse {
     private String accessToken;
     private String assignedTo;
-    private Date validTill;
+    private boolean isExpired;
+    private boolean isRevoked;
 
     public AuthResponse(JwtToken jwtToken){
         this.accessToken = jwtToken.getAccessToken();
         this.assignedTo = jwtToken.getUser().getEmail();
-        this.validTill = jwtToken.getExpiresAt();
+        this.isExpired = jwtToken.isExpired();
+        this.isRevoked = jwtToken.isRevoked();
     }
 }

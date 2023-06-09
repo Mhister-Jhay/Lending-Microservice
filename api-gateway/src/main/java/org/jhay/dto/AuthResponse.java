@@ -11,5 +11,6 @@ import java.util.Date;
 public class AuthResponse {
     private String accessToken;
     private String assignedTo;
-    private Date validTill;
+    private boolean isExpired;
+    private boolean isRevoked;
 }

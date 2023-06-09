@@ -27,13 +27,13 @@ public class JwtToken {
     @JoinColumn(name = "user_id")
     private User user;
     @Column(nullable = false)
-    private Date generatedAt;
+    private boolean isExpired;
     @Column(nullable = false)
-    private Date expiresAt;
+    private boolean isRevoked;
     public JwtToken(String accessToken){
         this.accessToken = accessToken;
-        this.generatedAt = new Date();
-        this.expiresAt = DateUtils.getExpirationDate();
+        this.isExpired = false;
+        this.isRevoked = false;
     }
 
     @Override
