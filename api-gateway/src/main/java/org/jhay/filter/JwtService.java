@@ -8,8 +8,12 @@ import org.springframework.stereotype.Component;
 public class JwtService {
     private final AuthRepository authRepository;
     public void isTokenValid(String token){
-       authRepository.findByAccessToken(token)
-               .orElseThrow(()-> new RuntimeException("Invalid Token"));
+        var isTokenValid = authRepository.findByAccessToken(token)
+                .map(t-> !t.isExpired() && !t.isRevoked())
+                .orElse(false);
+       if(!isTokenValid){
+           throw new RuntimeException("Invalid credentials");
+       }
     }
 
 }

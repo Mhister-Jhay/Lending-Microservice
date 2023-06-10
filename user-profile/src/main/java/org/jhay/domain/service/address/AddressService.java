@@ -10,5 +10,5 @@ public interface AddressService {
 
     AddressResponse getUserAddress(Long userId);
 
-    AddressResponse editUserAddress(Long userId, AddressRequest addressRequest);
+    String editUserAddress(Long userId, AddressRequest addressRequest);
 }

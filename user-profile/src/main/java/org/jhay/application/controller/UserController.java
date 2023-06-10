@@ -42,9 +42,9 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/edit-address")
-    public ResponseEntity<ApiResponse<AddressResponse>> editUserAddress(@PathVariable Long userId,
+    public ResponseEntity<ApiResponse<String>> editUserAddress(@PathVariable Long userId,
                                                                         @RequestBody AddressRequest request) {
-        ApiResponse<AddressResponse> apiResponse = new ApiResponse<>(addressService.editUserAddress(userId, request));
+        ApiResponse<String> apiResponse = new ApiResponse<>(addressService.editUserAddress(userId, request));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 }

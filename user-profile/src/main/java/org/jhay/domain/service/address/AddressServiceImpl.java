@@ -3,6 +3,7 @@ package org.jhay.domain.service.address;
 import lombok.RequiredArgsConstructor;
 import org.jhay.application.model.request.AddressRequest;
 import org.jhay.application.model.response.AddressResponse;
+import org.jhay.application.model.response.UserResponse;
 import org.jhay.common.exceptions.AddressAlreadyExistException;
 import org.jhay.common.exceptions.AddressNotFoundException;
 import org.jhay.common.exceptions.UserNotFoundException;
@@ -39,7 +40,17 @@ public class AddressServiceImpl implements AddressService {
                         .postalCode(addressRequest.getPostalCode())
                 .build());
         notificationService.sendAddressMessage("Address Saved Successfully");
-        return modelMapper.map(address,AddressResponse.class);
+        UserResponse userResponse = modelMapper.map(user,UserResponse.class);
+        return AddressResponse.builder()
+                .id(address.getId())
+                .city(addressRequest.getCity())
+                .state(addressRequest.getState())
+                .userResponse(userResponse)
+                .country(addressRequest.getCountry())
+                .street(addressRequest.getStreet())
+                .landmark(addressRequest.getLandmark())
+                .postalCode(addressRequest.getPostalCode())
+                .build();
     }
 
     @Override
@@ -52,7 +63,7 @@ public class AddressServiceImpl implements AddressService {
     }
 
     @Override
-    public AddressResponse editUserAddress(Long userId, AddressRequest addressRequest){
+    public String editUserAddress(Long userId, AddressRequest addressRequest){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
         Address address = addressRepository.findByUser(user)
@@ -63,6 +74,6 @@ public class AddressServiceImpl implements AddressService {
         address.setLandmark(addressRequest.getLandmark());
         address.setState(addressRequest.getState());
         address.setPostalCode(addressRequest.getPostalCode());
-        return modelMapper.map(addressRepository.save(address),AddressResponse.class);
+        return "Address changed successfully";
     }
 }

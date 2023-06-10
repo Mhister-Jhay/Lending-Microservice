@@ -13,9 +13,19 @@ public class RouteValidator {
             "/auth/verify-email",
             "/auth/request-new-verification-token",
             "/auth/forgot-password",
-            "auth/reset-password",
-            "auth/verify-reset-password",
+            "/auth/reset-password",
+            "/auth/verify-reset-password",
             "/auth/login",
+            "/v2/api-docs",
+            "/v3/api-docs",
+            "/v3/api-docs/**",
+            "/swagger-resources",
+            "/swagger-resources/**",
+            "/configuration/ui",
+            "/configuration/security",
+            "/swagger-ui/**",
+            "/webjars/**",
+            "/swagger-ui.html",
             "/eureka"
     );
 

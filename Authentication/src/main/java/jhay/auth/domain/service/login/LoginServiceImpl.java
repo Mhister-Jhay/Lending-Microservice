@@ -45,6 +45,7 @@ public class LoginServiceImpl implements LoginService {
                 user.getEmail(),user.getPassword());
         String accessToken = authProvider.generateToken(authentication);
         JwtToken jwtToken = new JwtToken(accessToken);
+        jwtToken.setUser(user);
         authProvider.revokeAllUserTokens(user);
         AuthResponse authResponse = new AuthResponse(jwtTokenRepository.save(jwtToken));
         notificationService.sendLoginMessage(authResponse);
