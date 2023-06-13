@@ -6,6 +6,7 @@ import org.jhay.application.model.response.AddressResponse;
 import org.jhay.application.model.response.UserResponse;
 import org.jhay.common.exceptions.AddressAlreadyExistException;
 import org.jhay.common.exceptions.AddressNotFoundException;
+import org.jhay.common.exceptions.UnauthorizedException;
 import org.jhay.common.exceptions.UserNotFoundException;
 import org.jhay.domain.model.Address;
 import org.jhay.domain.model.User;
@@ -59,21 +60,35 @@ public class AddressServiceImpl implements AddressService {
                 .orElseThrow(() -> new UserNotFoundException(userId));
         Address address = addressRepository.findByUser(user)
                 .orElseThrow(()-> new AddressNotFoundException("User has no address saved"));
-        return modelMapper.map(address, AddressResponse.class);
+        UserResponse userResponse = modelMapper.map(user,UserResponse.class);
+        return AddressResponse.builder()
+                .id(address.getId())
+                .city(address.getCity())
+                .state(address.getState())
+                .userResponse(userResponse)
+                .country(address.getCountry())
+                .street(address.getStreet())
+                .landmark(address.getLandmark())
+                .postalCode(address.getPostalCode())
+                .build();
     }
 
     @Override
-    public String editUserAddress(Long userId, AddressRequest addressRequest){
+    public String editUserAddress(Long userId, Long addressId, AddressRequest addressRequest){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
-        Address address = addressRepository.findByUser(user)
+        Address address = addressRepository.findById(addressId)
                 .orElseThrow(()-> new AddressNotFoundException("User has no address saved"));
+        if(!address.getUser().equals(user)){
+            throw new UnauthorizedException("User has no access to these records");
+        }
         address.setStreet(addressRequest.getStreet());
         address.setCity(addressRequest.getCity());
         address.setCountry(addressRequest.getCountry());
         address.setLandmark(addressRequest.getLandmark());
         address.setState(addressRequest.getState());
         address.setPostalCode(addressRequest.getPostalCode());
+        addressRepository.save(address);
         return "Address changed successfully";
     }
 }

@@ -16,4 +16,8 @@ public class NotificationService {
         rabbitTemplate.convertAndSend("userAddressTopic",
                 "address.saved", response);
     }
+    public void sendEmploymentMessage(String response){
+        rabbitTemplate.convertAndSend("userEmploymentTopic",
+                "employment.saved", response);
+    }
 }

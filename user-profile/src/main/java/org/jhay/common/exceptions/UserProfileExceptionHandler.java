@@ -57,4 +57,37 @@ public class UserProfileExceptionHandler {
                 .build();
         return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
     }
+    @ExceptionHandler(EmploymentAlreadyExistException.class)
+    public ResponseEntity<ExceptionResponse> userEmploymentExist(EmploymentAlreadyExistException e,
+                                                                 HttpServletRequest request){
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .time(DateUtils.saveLocalDate(LocalDateTime.now()))
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .statusCode(HttpStatus.BAD_REQUEST.value())
+                .build();
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+    }
+    @ExceptionHandler(EmploymentNotFoundException.class)
+    public ResponseEntity<ExceptionResponse> userEmploymentNotFound(EmploymentNotFoundException e,
+                                                                 HttpServletRequest request){
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .time(DateUtils.saveLocalDate(LocalDateTime.now()))
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .statusCode(HttpStatus.NOT_FOUND.value())
+                .build();
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+    }
+    @ExceptionHandler(UnauthorizedException.class)
+    public ResponseEntity<ExceptionResponse> userNotAuthorized(UnauthorizedException e,
+                                                                 HttpServletRequest request){
+        ExceptionResponse exceptionResponse = ExceptionResponse.builder()
+                .time(DateUtils.saveLocalDate(LocalDateTime.now()))
+                .message(e.getMessage())
+                .path(request.getRequestURI())
+                .statusCode(HttpStatus.UNAUTHORIZED.value())
+                .build();
+        return new ResponseEntity<>(exceptionResponse,HttpStatus.UNAUTHORIZED);
+    }
 }

@@ -26,6 +26,7 @@ public class Account {
     private String createdAt;
     @OneToOne(cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id",referencedColumnName = "id")
+    @ToString.Exclude
     private User user;
 
 }

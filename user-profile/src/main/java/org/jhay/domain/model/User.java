@@ -31,7 +31,10 @@ public class User {
     private Gender gender;
     @OneToOne(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private Address address;
-
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+    private Account account;
+    @OneToOne(mappedBy = "user",cascade = CascadeType.ALL, orphanRemoval = true)
+    private Employment employment;
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
