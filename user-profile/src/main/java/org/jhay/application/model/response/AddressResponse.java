@@ -2,11 +2,13 @@ package org.jhay.application.model.response;
 
 import lombok.*;
 
+import java.io.Serializable;
+
 @Data
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddressResponse {
+public class AddressResponse implements Serializable {
     private Long id;
     private String street;
     private String landmark;

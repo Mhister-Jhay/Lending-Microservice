@@ -15,6 +15,8 @@ import org.jhay.domain.repository.EmploymentRepository;
 import org.jhay.domain.repository.UserRepository;
 import org.jhay.domain.service.notification.NotificationService;
 import org.modelmapper.ModelMapper;
+import org.springframework.cache.annotation.CachePut;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -55,7 +57,7 @@ public class EmploymentServiceImpl implements EmploymentService{
                 .userResponse(userResponse)
                 .build();
     }
-
+    @Cacheable(cacheNames = "employment-record", key = "#userId")
     @Override
     public EmploymentResponse getUserEmployment(Long userId){
         User user = userRepository.findById(userId)
@@ -75,9 +77,9 @@ public class EmploymentServiceImpl implements EmploymentService{
                 .userResponse(userResponse)
                 .build();
     }
-
+    @CachePut(cacheNames = "employment-record", key = "#userId")
     @Override
-    public String updateEmployment(Long userId, Long employmentId, EmploymentRequest request){
+    public EmploymentResponse updateEmployment(Long userId, Long employmentId, EmploymentRequest request){
         User user = userRepository.findById(userId)
                 .orElseThrow(() -> new UserNotFoundException(userId));
         Employment employment = employmentRepository.findById(employmentId)
@@ -92,7 +94,18 @@ public class EmploymentServiceImpl implements EmploymentService{
         employment.setCompanyContact(request.getCompanyContact());
         employment.setCompanyAddress(request.getCompanyAddress());
         employment.setCompanyEmail(request.getCompanyEmail());
-        employmentRepository.save(employment);
-        return "Employment Record Updated Successfully";
+        Employment editedEmployment = employmentRepository.save(employment);
+        UserResponse userResponse = modelMapper.map(user,UserResponse.class);
+        return EmploymentResponse.builder()
+                .id(editedEmployment.getId())
+                .employmentStatus(editedEmployment.getEmploymentStatus().name())
+                .position(editedEmployment.getPosition())
+                .salary(editedEmployment.getSalary())
+                .company(editedEmployment.getCompany())
+                .companyAddress(editedEmployment.getCompanyAddress())
+                .companyContact(editedEmployment.getCompanyContact())
+                .companyEmail(editedEmployment.getCompanyEmail())
+                .userResponse(userResponse)
+                .build();
     }
 }

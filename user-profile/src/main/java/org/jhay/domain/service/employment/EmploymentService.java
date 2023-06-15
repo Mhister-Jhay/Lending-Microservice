@@ -10,5 +10,5 @@ public interface EmploymentService {
 
     EmploymentResponse getUserEmployment(Long userId);
 
-    String updateEmployment(Long userId, Long employmentId, EmploymentRequest request);
+    EmploymentResponse updateEmployment(Long userId, Long employmentId, EmploymentRequest request);
 }

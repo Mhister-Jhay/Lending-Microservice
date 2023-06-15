@@ -46,9 +46,9 @@ public class UserController {
     }
 
     @PutMapping("/{userId}/edit-address/{addressId}")
-    public ResponseEntity<ApiResponse<String>> editUserAddress(@PathVariable Long userId, @PathVariable Long addressId,
+    public ResponseEntity<ApiResponse<AddressResponse>> editUserAddress(@PathVariable Long userId, @PathVariable Long addressId,
                                                                @RequestBody AddressRequest request) {
-        ApiResponse<String> apiResponse = new ApiResponse<>(addressService.editUserAddress(userId,addressId, request));
+        ApiResponse<AddressResponse> apiResponse = new ApiResponse<>(addressService.editUserAddress(userId,addressId, request));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @PostMapping("/{userId}/save-employment")
@@ -59,9 +59,9 @@ public class UserController {
     }
 
     @PostMapping("/{userId}/edit-employment/{employmentId}")
-    public ResponseEntity<ApiResponse<String>> editUserEmployment(@PathVariable Long userId, @PathVariable Long employmentId,
+    public ResponseEntity<ApiResponse<EmploymentResponse>> editUserEmployment(@PathVariable Long userId, @PathVariable Long employmentId,
                                                                   @RequestBody EmploymentRequest request){
-        ApiResponse<String> apiResponse = new ApiResponse<>(employmentService.updateEmployment(userId,employmentId,request));
+        ApiResponse<EmploymentResponse> apiResponse = new ApiResponse<>(employmentService.updateEmployment(userId,employmentId,request));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 }

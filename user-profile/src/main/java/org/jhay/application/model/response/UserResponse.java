@@ -4,9 +4,11 @@ import lombok.Builder;
 import lombok.Data;
 import org.jhay.domain.enums.Gender;
 
+import java.io.Serializable;
+
 @Data
 @Builder
-public class UserResponse {
+public class UserResponse implements Serializable {
     private Long id;
     private String firstName;
     private String lastName;
