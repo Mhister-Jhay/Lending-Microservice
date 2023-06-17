@@ -9,6 +9,7 @@
         <outputRelativeToContentRoot value="true" />
         <module name="api-gateway" />
         <module name="user-profile" />
+        <module name="Loan" />
         <module name="service-registry" />
         <module name="Authentication" />
       </profile>
@@ -17,6 +18,7 @@
   <component name="JavacSettings">
     <option name="ADDITIONAL_OPTIONS_OVERRIDE">
       <module name="Authentication" options="-parameters" />
+      <module name="Loan" options="-parameters" />
       <module name="api-gateway" options="-parameters" />
       <module name="service-registry" options="-parameters" />
       <module name="user-profile" options="-parameters" />
