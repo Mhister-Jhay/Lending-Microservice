@@ -16,10 +16,6 @@ spring:
     port: 5672
   application:
     name: auth-service
-  datasource:
-    url: jdbc:postgresql://localhost:5432/auth
-    username: postgres
-    password: 1234
   jpa:
     hibernate:
       ddl-auto: create

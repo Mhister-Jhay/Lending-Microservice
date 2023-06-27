@@ -1,8 +1,10 @@
 package org.jhay.application.model.response;
 
 import com.fasterxml.jackson.annotation.JsonPropertyOrder;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.jhay.common.utils.DateUtils;
 
 import java.time.LocalDateTime;

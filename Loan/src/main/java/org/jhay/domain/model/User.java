@@ -26,5 +26,11 @@ public class User {
     private String phoneNumber;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Column(nullable = false)
+    private Boolean isAccountSaved;
+    @Column(nullable = false)
+    private Boolean isAddressSaved;
+    @Column(nullable = false)
+    private Boolean isEmploymentSaved;
 }
 

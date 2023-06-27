@@ -1,18 +1,11 @@
-package org.jhay.application.model.response;
+package org.jhay.application.dto;
 
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
-import lombok.NoArgsConstructor;
 import org.jhay.domain.enums.Gender;
-
-import java.io.Serializable;
-
 @Data
 @Builder
-@AllArgsConstructor
-@NoArgsConstructor
-public class UserResponse implements Serializable {
+public class UserResponse {
     private Long id;
     private String firstName;
     private String lastName;

@@ -3,6 +3,7 @@ package org.jhay.domain.service.employment;
 import lombok.RequiredArgsConstructor;
 import org.jhay.application.model.request.EmploymentRequest;
 import org.jhay.application.model.response.EmploymentResponse;
+import org.jhay.application.model.response.MessageResponse;
 import org.jhay.application.model.response.UserResponse;
 import org.jhay.common.exceptions.EmploymentAlreadyExistException;
 import org.jhay.common.exceptions.EmploymentNotFoundException;
@@ -43,7 +44,10 @@ public class EmploymentServiceImpl implements EmploymentService{
                         .companyContact(employmentRequest.getCompanyContact())
                         .companyAddress(employmentRequest.getCompanyAddress())
                         .build());
-        notificationService.sendEmploymentMessage("Employment Record Saved Successfully");
+        notificationService.sendEmploymentMessage(MessageResponse.builder()
+                .userId(user.getId())
+                .message("Employment Saved Successfully")
+                .build());
         UserResponse userResponse = modelMapper.map(user,UserResponse.class);
         return EmploymentResponse.builder()
                 .id(employment.getId())

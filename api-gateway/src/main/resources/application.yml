@@ -24,10 +24,6 @@ spring:
              - Path=/loan/**
            filters:
              - AuthenticationFilter
-  datasource:
-    url: jdbc:postgresql://localhost:5432/api_gateway
-    username: postgres
-    password: 1234
   jpa:
     hibernate:
       ddl-auto: create

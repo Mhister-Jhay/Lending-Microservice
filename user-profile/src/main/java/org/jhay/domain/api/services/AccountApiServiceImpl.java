@@ -6,6 +6,7 @@ import lombok.RequiredArgsConstructor;
 import org.apache.tomcat.util.json.JSONParser;
 import org.apache.tomcat.util.json.ParseException;
 import org.jhay.application.model.request.BankRequest;
+import org.jhay.application.model.response.MessageResponse;
 import org.jhay.common.exceptions.UserNotFoundException;
 import org.jhay.common.utils.ApiConnection;
 import org.jhay.common.utils.ConnectionString;
@@ -77,7 +78,10 @@ public class AccountApiServiceImpl implements AccountApiService, ApplicationRunn
                 .createdAt(DateUtils.saveLocalDate(LocalDateTime.now()))
                 .user(user)
                 .build());
-        notificationService.sendAccountMessage("Account Saved Successfully");
+        notificationService.sendAccountMessage(MessageResponse.builder()
+                .userId(user.getId())
+                .message("Account Saved Successfully")
+                .build());
         return SaveAccountResponse.builder()
                 .message("Account Saved Successfully")
                 .accountBank(account.getBankName())

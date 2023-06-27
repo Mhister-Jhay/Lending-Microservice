@@ -3,6 +3,7 @@ package org.jhay.domain.service.address;
 import lombok.RequiredArgsConstructor;
 import org.jhay.application.model.request.AddressRequest;
 import org.jhay.application.model.response.AddressResponse;
+import org.jhay.application.model.response.MessageResponse;
 import org.jhay.application.model.response.UserResponse;
 import org.jhay.common.exceptions.AddressAlreadyExistException;
 import org.jhay.common.exceptions.AddressNotFoundException;
@@ -42,7 +43,10 @@ public class AddressServiceImpl implements AddressService {
                         .landmark(addressRequest.getLandmark())
                         .postalCode(addressRequest.getPostalCode())
                 .build());
-        notificationService.sendAddressMessage("Address Saved Successfully");
+        notificationService.sendAddressMessage(MessageResponse.builder()
+                        .userId(user.getId())
+                        .message("Address Saved Successfully")
+                        .build());
         UserResponse userResponse = modelMapper.map(user,UserResponse.class);
         return AddressResponse.builder()
                 .id(address.getId())
