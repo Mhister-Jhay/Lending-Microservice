@@ -30,7 +30,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressResponse saveUserAddress(Long userId, AddressRequest addressRequest){
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         if(addressRepository.existsByUser(user)){
             throw new AddressAlreadyExistException("Address is already saved");
         }
@@ -63,7 +63,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressResponse getUserAddress(Long userId){
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         Address address = addressRepository.findByUser(user)
                 .orElseThrow(()-> new AddressNotFoundException("User has no address saved"));
         UserResponse userResponse = modelMapper.map(user,UserResponse.class);
@@ -82,7 +82,7 @@ public class AddressServiceImpl implements AddressService {
     @Override
     public AddressResponse editUserAddress(Long userId, Long addressId, AddressRequest addressRequest){
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(()-> new AddressNotFoundException("User has no address saved"));
         if(!address.getUser().equals(user)){

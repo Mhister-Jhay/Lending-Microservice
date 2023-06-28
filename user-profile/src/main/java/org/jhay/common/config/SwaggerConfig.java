@@ -24,8 +24,8 @@ public class SwaggerConfig {
                 .components(new Components()
                         .addSecuritySchemes("jwt", securityScheme))
                 .info(new Info()
-                        .title("BANK API IN EVENT")
-                        .description("Api that provides crud operations for a bank details.")
+                        .title("LOAN APP USER_PROFILE-SERVICE")
+                        .description("The user profile microservice for the loan application")
                         .version(version))
                 .security(Collections.singletonList(new SecurityRequirement().addList("jwt")));
     }

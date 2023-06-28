@@ -18,20 +18,20 @@ import java.io.IOException;
 @RequiredArgsConstructor
 public class JwtAuthenticationFilter extends OncePerRequestFilter {
     private final JwtService jwtService;
-    private final CustomUserDetailService userService;
+    private final CustomUserDetailsService userService;
     @Override
     protected void doFilterInternal(@NonNull HttpServletRequest request,
                                     @NonNull HttpServletResponse response,
                                     @NonNull FilterChain filterChain) throws ServletException, IOException {
         String authHeader = request.getHeader("Authorization");
-        String token;
         String username;
+        String token;
         if(authHeader == null || !authHeader.startsWith("Bearer ")){
             filterChain.doFilter(request,response);
             return;
         }
         token = authHeader.substring(7);
-        username = jwtService.extractUserName(token);
+        username = jwtService.extractUsername(token);
         if(username != null && SecurityContextHolder.getContext().getAuthentication() == null){
             UserDetails userDetails = userService.loadUserByUsername(username);
             if(jwtService.isTokenValid(token)){

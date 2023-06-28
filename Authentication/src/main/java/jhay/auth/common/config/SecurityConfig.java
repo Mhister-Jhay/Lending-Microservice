@@ -1,4 +1,4 @@
-package jhay.auth.common.security.config;
+package jhay.auth.common.config;
 
 import jhay.auth.common.security.jwt.JwtAuthenticationEntryPoint;
 import jhay.auth.common.security.jwt.JwtAuthenticationFilter;

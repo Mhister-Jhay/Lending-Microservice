@@ -31,7 +31,7 @@ public class EmploymentServiceImpl implements EmploymentService{
     @Override
     public EmploymentResponse saveEmployment(Long userId, EmploymentRequest employmentRequest){
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         if(employmentRepository.existsByUser(user)){
             throw new EmploymentAlreadyExistException("Employment Record is already saved");
         }
@@ -65,7 +65,7 @@ public class EmploymentServiceImpl implements EmploymentService{
     @Override
     public EmploymentResponse getUserEmployment(Long userId){
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         Employment employment = employmentRepository.findByUser(user)
                 .orElseThrow(()-> new EmploymentNotFoundException("User has no employment record"));
         UserResponse userResponse = modelMapper.map(user,UserResponse.class);
@@ -85,7 +85,7 @@ public class EmploymentServiceImpl implements EmploymentService{
     @Override
     public EmploymentResponse updateEmployment(Long userId, Long employmentId, EmploymentRequest request){
         User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException(userId));
+                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
         Employment employment = employmentRepository.findById(employmentId)
                 .orElseThrow(()-> new EmploymentNotFoundException("User has no employment record"));
         if(!employment.getUser().equals(user)){

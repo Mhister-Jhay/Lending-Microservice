@@ -1,4 +1,4 @@
-package jhay.auth.common.security.config;
+package jhay.auth.common.config;
 
 import com.rabbitmq.client.ConnectionFactory;
 import org.springframework.amqp.core.Binding;

@@ -1,4 +1,4 @@
-package jhay.auth.common.security.config;
+package jhay.auth.common.config;
 
 import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
@@ -26,8 +26,8 @@ public class SwaggerConfig {
                 .components(new Components()
                         .addSecuritySchemes("jwt", securityScheme))
                 .info(new Info()
-                        .title("BANK API IN EVENT")
-                        .description("Api that provides crud operations for a bank details.")
+                        .title("LOAN APP AUTH-SERVICE")
+                        .description("The authentication microservice of the loan application")
                         .version(version))
                 .security(Collections.singletonList(new SecurityRequirement().addList("jwt")));
     }

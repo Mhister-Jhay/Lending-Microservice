@@ -56,7 +56,7 @@ public class AccountApiServiceImpl implements AccountApiService, ApplicationRunn
 
     @Override
     public SaveAccountResponse saveUserAccount(Long userId, VerifyAccountRequest request) throws ParseException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException(userId));
+        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         AccountRequest accountRequest = AccountRequest.builder()
                 .business_name(verifyUserAccount(request))
                 .account_number(request.getAccount_number())
