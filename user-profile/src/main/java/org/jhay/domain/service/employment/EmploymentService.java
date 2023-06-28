@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface EmploymentService {
-    EmploymentResponse saveEmployment(Long userId, EmploymentRequest employmentRequest);
+    EmploymentResponse saveEmployment(EmploymentRequest employmentRequest);
 
-    EmploymentResponse getUserEmployment(Long userId);
+    EmploymentResponse getUserEmployment();
 
-    EmploymentResponse updateEmployment(Long userId, Long employmentId, EmploymentRequest request);
+    EmploymentResponse updateEmployment(Long employmentId, EmploymentRequest request);
 }

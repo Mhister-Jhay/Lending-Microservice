@@ -9,14 +9,13 @@ import org.jhay.common.exceptions.AddressAlreadyExistException;
 import org.jhay.common.exceptions.AddressNotFoundException;
 import org.jhay.common.exceptions.UnauthorizedException;
 import org.jhay.common.exceptions.UserNotFoundException;
+import org.jhay.common.utils.SecurityUtils;
 import org.jhay.domain.model.Address;
 import org.jhay.domain.model.User;
 import org.jhay.domain.repository.AddressRepository;
 import org.jhay.domain.repository.UserRepository;
 import org.jhay.domain.service.notification.NotificationService;
 import org.modelmapper.ModelMapper;
-import org.springframework.cache.annotation.CachePut;
-import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 @Service
@@ -28,9 +27,9 @@ public class AddressServiceImpl implements AddressService {
     private final UserRepository userRepository;
 
     @Override
-    public AddressResponse saveUserAddress(Long userId, AddressRequest addressRequest){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
+    public AddressResponse saveUserAddress(AddressRequest addressRequest){
+        String email = SecurityUtils.getUserFromContext();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         if(addressRepository.existsByUser(user)){
             throw new AddressAlreadyExistException("Address is already saved");
         }
@@ -59,11 +58,11 @@ public class AddressServiceImpl implements AddressService {
                 .postalCode(addressRequest.getPostalCode())
                 .build();
     }
-    @Cacheable(cacheNames = "address", key = "#userId")
+//    @Cacheable(cacheNames = "address", key = "#userId")
     @Override
-    public AddressResponse getUserAddress(Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
+    public AddressResponse getUserAddress(){
+        String email = SecurityUtils.getUserFromContext();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         Address address = addressRepository.findByUser(user)
                 .orElseThrow(()-> new AddressNotFoundException("User has no address saved"));
         UserResponse userResponse = modelMapper.map(user,UserResponse.class);
@@ -78,11 +77,11 @@ public class AddressServiceImpl implements AddressService {
                 .postalCode(address.getPostalCode())
                 .build();
     }
-    @CachePut(cacheNames = "address", key = "#userId")
+//    @CachePut(cacheNames = "address", key = "#userId")
     @Override
-    public AddressResponse editUserAddress(Long userId, Long addressId, AddressRequest addressRequest){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
+    public AddressResponse editUserAddress(Long addressId, AddressRequest addressRequest){
+        String email = SecurityUtils.getUserFromContext();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         Address address = addressRepository.findById(addressId)
                 .orElseThrow(()-> new AddressNotFoundException("User has no address saved"));
         if(!address.getUser().equals(user)){

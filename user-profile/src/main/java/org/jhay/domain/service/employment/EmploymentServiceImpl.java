@@ -9,6 +9,7 @@ import org.jhay.common.exceptions.EmploymentAlreadyExistException;
 import org.jhay.common.exceptions.EmploymentNotFoundException;
 import org.jhay.common.exceptions.UnauthorizedException;
 import org.jhay.common.exceptions.UserNotFoundException;
+import org.jhay.common.utils.SecurityUtils;
 import org.jhay.domain.enums.EmploymentStatus;
 import org.jhay.domain.model.Employment;
 import org.jhay.domain.model.User;
@@ -29,9 +30,9 @@ public class EmploymentServiceImpl implements EmploymentService{
     private final UserRepository userRepository;
 
     @Override
-    public EmploymentResponse saveEmployment(Long userId, EmploymentRequest employmentRequest){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
+    public EmploymentResponse saveEmployment(EmploymentRequest employmentRequest){
+        String email = SecurityUtils.getUserFromContext();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         if(employmentRepository.existsByUser(user)){
             throw new EmploymentAlreadyExistException("Employment Record is already saved");
         }
@@ -61,11 +62,11 @@ public class EmploymentServiceImpl implements EmploymentService{
                 .userResponse(userResponse)
                 .build();
     }
-    @Cacheable(cacheNames = "employment-record", key = "#userId")
+//    @Cacheable(cacheNames = "employment-record", key = "#userId")
     @Override
-    public EmploymentResponse getUserEmployment(Long userId){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
+    public EmploymentResponse getUserEmployment(){
+        String email = SecurityUtils.getUserFromContext();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         Employment employment = employmentRepository.findByUser(user)
                 .orElseThrow(()-> new EmploymentNotFoundException("User has no employment record"));
         UserResponse userResponse = modelMapper.map(user,UserResponse.class);
@@ -81,11 +82,11 @@ public class EmploymentServiceImpl implements EmploymentService{
                 .userResponse(userResponse)
                 .build();
     }
-    @CachePut(cacheNames = "employment-record", key = "#userId")
+//    @CachePut(cacheNames = "employment-record", key = "#userId")
     @Override
-    public EmploymentResponse updateEmployment(Long userId, Long employmentId, EmploymentRequest request){
-        User user = userRepository.findById(userId)
-                .orElseThrow(() -> new UserNotFoundException("User does not exist"));
+    public EmploymentResponse updateEmployment(Long employmentId, EmploymentRequest request){
+        String email = SecurityUtils.getUserFromContext();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         Employment employment = employmentRepository.findById(employmentId)
                 .orElseThrow(()-> new EmploymentNotFoundException("User has no employment record"));
         if(!employment.getUser().equals(user)){

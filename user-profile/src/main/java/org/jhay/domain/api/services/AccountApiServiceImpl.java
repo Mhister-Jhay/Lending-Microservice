@@ -11,6 +11,7 @@ import org.jhay.common.exceptions.UserNotFoundException;
 import org.jhay.common.utils.ApiConnection;
 import org.jhay.common.utils.ConnectionString;
 import org.jhay.common.utils.DateUtils;
+import org.jhay.common.utils.SecurityUtils;
 import org.jhay.domain.api.model.Banks;
 import org.jhay.domain.api.model.request.AccountRequest;
 import org.jhay.domain.api.model.request.VerifyAccountRequest;
@@ -55,8 +56,9 @@ public class AccountApiServiceImpl implements AccountApiService, ApplicationRunn
     }
 
     @Override
-    public SaveAccountResponse saveUserAccount(Long userId, VerifyAccountRequest request) throws ParseException {
-        User user = userRepository.findById(userId).orElseThrow(() -> new UserNotFoundException("User does not exist"));
+    public SaveAccountResponse saveUserAccount(VerifyAccountRequest request) throws ParseException {
+        String email = SecurityUtils.getUserFromContext();
+        User user = userRepository.findByEmail(email).orElseThrow(() -> new UserNotFoundException("User does not exist"));
         AccountRequest accountRequest = AccountRequest.builder()
                 .business_name(verifyUserAccount(request))
                 .account_number(request.getAccount_number())

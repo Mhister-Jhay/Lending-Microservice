@@ -6,9 +6,9 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface AddressService {
-    AddressResponse saveUserAddress(Long userId, AddressRequest addressRequest);
+    AddressResponse saveUserAddress(AddressRequest addressRequest);
 
-    AddressResponse getUserAddress(Long userId);
+    AddressResponse getUserAddress();
 
-    AddressResponse editUserAddress(Long userId, Long addressId, AddressRequest addressRequest);
+    AddressResponse editUserAddress(Long addressId, AddressRequest addressRequest);
 }

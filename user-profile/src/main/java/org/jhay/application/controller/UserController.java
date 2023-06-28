@@ -24,44 +24,46 @@ public class UserController {
     private final AddressService addressService;
     private final EmploymentService employmentService;
 
-    @PostMapping("/{userId}/save-account")
-    public ResponseEntity<ApiResponse<SaveAccountResponse>> saveUserAccount(@PathVariable Long userId,
-                                                                            @RequestBody VerifyAccountRequest request)
+    @PostMapping("/save-account")
+    public ResponseEntity<ApiResponse<SaveAccountResponse>> saveUserAccount(@RequestBody VerifyAccountRequest request)
             throws ParseException {
-        ApiResponse<SaveAccountResponse> apiResponse = new ApiResponse<>(accountApiService.saveUserAccount(userId, request));
+        ApiResponse<SaveAccountResponse> apiResponse = new ApiResponse<>(accountApiService.saveUserAccount(request));
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{userId}/save-address")
-    public ResponseEntity<ApiResponse<AddressResponse>> saveUserAddress(@PathVariable Long userId,
-                                                                        @RequestBody AddressRequest request) {
-        ApiResponse<AddressResponse> apiResponse = new ApiResponse<>(addressService.saveUserAddress(userId, request));
+    @PostMapping("/save-address")
+    public ResponseEntity<ApiResponse<AddressResponse>> saveUserAddress(@RequestBody AddressRequest request) {
+        ApiResponse<AddressResponse> apiResponse = new ApiResponse<>(addressService.saveUserAddress(request));
         return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
-    @GetMapping("/{userId}/get-address")
-    public ResponseEntity<ApiResponse<AddressResponse>> getUserAddress(@PathVariable Long userId) {
-        ApiResponse<AddressResponse> apiResponse = new ApiResponse<>(addressService.getUserAddress(userId));
+    @GetMapping("/get-address")
+    public ResponseEntity<ApiResponse<AddressResponse>> getUserAddress() {
+        ApiResponse<AddressResponse> apiResponse = new ApiResponse<>(addressService.getUserAddress());
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 
-    @PutMapping("/{userId}/edit-address/{addressId}")
-    public ResponseEntity<ApiResponse<AddressResponse>> editUserAddress(@PathVariable Long userId, @PathVariable Long addressId,
+    @PutMapping("/edit-address/{addressId}")
+    public ResponseEntity<ApiResponse<AddressResponse>> editUserAddress(@PathVariable Long addressId,
                                                                @RequestBody AddressRequest request) {
-        ApiResponse<AddressResponse> apiResponse = new ApiResponse<>(addressService.editUserAddress(userId,addressId, request));
+        ApiResponse<AddressResponse> apiResponse = new ApiResponse<>(addressService.editUserAddress(addressId, request));
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
-    @PostMapping("/{userId}/save-employment")
-    public ResponseEntity<ApiResponse<EmploymentResponse>> saveUserEmployment(@PathVariable Long userId,
-                                                                              @RequestBody EmploymentRequest request){
-        ApiResponse<EmploymentResponse> apiResponse = new ApiResponse<>(employmentService.saveEmployment(userId,request));
-        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    @PostMapping("/save-employment")
+    public ResponseEntity<ApiResponse<EmploymentResponse>> saveUserEmployment(@RequestBody EmploymentRequest request){
+        ApiResponse<EmploymentResponse> apiResponse = new ApiResponse<>(employmentService.saveEmployment(request));
+        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
 
-    @PostMapping("/{userId}/edit-employment/{employmentId}")
-    public ResponseEntity<ApiResponse<EmploymentResponse>> editUserEmployment(@PathVariable Long userId, @PathVariable Long employmentId,
+    @PostMapping("/edit-employment/{employmentId}")
+    public ResponseEntity<ApiResponse<EmploymentResponse>> editUserEmployment(@PathVariable Long employmentId,
                                                                   @RequestBody EmploymentRequest request){
-        ApiResponse<EmploymentResponse> apiResponse = new ApiResponse<>(employmentService.updateEmployment(userId,employmentId,request));
+        ApiResponse<EmploymentResponse> apiResponse = new ApiResponse<>(employmentService.updateEmployment(employmentId,request));
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
+    }
+    @GetMapping("/get-employment")
+    public ResponseEntity<ApiResponse<EmploymentResponse>> getUserEmployment(){
+        ApiResponse<EmploymentResponse> apiResponse = new ApiResponse<>(employmentService.getUserEmployment());
         return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 }

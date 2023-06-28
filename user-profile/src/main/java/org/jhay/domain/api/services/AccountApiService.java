@@ -7,5 +7,5 @@ import org.springframework.stereotype.Service;
 
 @Service
 public interface AccountApiService {
-    SaveAccountResponse saveUserAccount(Long userId, VerifyAccountRequest request) throws ParseException;
+    SaveAccountResponse saveUserAccount(VerifyAccountRequest request) throws ParseException;
 }

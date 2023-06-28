@@ -1,11 +1,5 @@
 package org.jhay;
 
-import lombok.RequiredArgsConstructor;
-import org.jhay.domain.enums.Gender;
-import org.jhay.domain.model.User;
-import org.jhay.domain.repository.UserRepository;
-import org.springframework.boot.ApplicationArguments;
-import org.springframework.boot.ApplicationRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
