@@ -12,7 +12,7 @@ import jhay.auth.domain.model.User;
 import jhay.auth.domain.model.VerificationToken;
 import jhay.auth.domain.service.notification.NotificationService;
 import jhay.auth.domain.service.user.UserServiceImpl;
-import jhay.auth.repository.VerificationTokenRepository;
+import jhay.auth.domain.repository.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.ApplicationEventPublisher;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;

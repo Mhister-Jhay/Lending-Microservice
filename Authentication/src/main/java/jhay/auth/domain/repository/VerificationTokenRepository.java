@@ -1,4 +1,4 @@
-package jhay.auth.repository;
+package jhay.auth.domain.repository;
 
 import jhay.auth.domain.model.User;
 import jhay.auth.domain.model.VerificationToken;

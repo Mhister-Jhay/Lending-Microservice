@@ -1,4 +1,4 @@
-package jhay.auth.repository;
+package jhay.auth.domain.repository;
 
 import jhay.auth.domain.model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
