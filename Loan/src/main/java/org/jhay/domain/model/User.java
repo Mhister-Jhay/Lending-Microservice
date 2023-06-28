@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.*;
 import org.jhay.domain.enums.Gender;
 
+import java.util.List;
+
 @Getter
 @Setter
 @ToString
@@ -32,5 +34,8 @@ public class User {
     private Boolean isAddressSaved;
     @Column(nullable = false)
     private Boolean isEmploymentSaved;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    @ToString.Exclude
+    private List<Loan> loans;
 }
 
