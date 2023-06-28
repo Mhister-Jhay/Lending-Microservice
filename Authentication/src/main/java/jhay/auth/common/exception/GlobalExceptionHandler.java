@@ -1,6 +1,7 @@
 package jhay.auth.common.exception;
 
 import jakarta.servlet.http.HttpServletRequest;
+import jhay.auth.application.model.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.FieldError;
@@ -14,9 +15,9 @@ import java.util.Map;
 
 @ControllerAdvice
 public class GlobalExceptionHandler {
-    @ExceptionHandler
-    public ResponseEntity<Object> validationException(MethodArgumentNotValidException e,
-                                                      HttpServletRequest request){
+    @ExceptionHandler(MethodArgumentNotValidException.class)
+    public ResponseEntity<ApiResponse<Object>> validationException(MethodArgumentNotValidException e,
+                                                                  HttpServletRequest request){
         Map<String, String> invalidErrors = new HashMap<>();
         e.getBindingResult().getAllErrors().forEach((error)->{
             String fieldName = ((FieldError)error).getField();
@@ -24,11 +25,12 @@ public class GlobalExceptionHandler {
             invalidErrors.put(fieldName,message);});
         invalidErrors.put("path", request.getRequestURI());
         invalidErrors.put("errorTime", LocalDateTime.now().toString());
-        return new ResponseEntity<>(invalidErrors, HttpStatus.BAD_REQUEST);
+        ApiResponse<Object> apiResponse = new ApiResponse<>(invalidErrors);
+        return new ResponseEntity<>(apiResponse, HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponse> userNotFound(UserNotFoundException e,
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiResponse<ExceptionResponse>> userNotFound(UserNotFoundException e,
                                                           HttpServletRequest request){
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .time(LocalDateTime.now())
@@ -36,11 +38,12 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .build();
-        return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+        ApiResponse<ExceptionResponse> apiResponse = new ApiResponse<>(exceptionResponse);
+        return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponse> userAlreadyExist(UserAlreadyExistException e,
+    @ExceptionHandler(UserAlreadyExistException.class)
+    public ResponseEntity<ApiResponse<ExceptionResponse>> userAlreadyExist(UserAlreadyExistException e,
                                                           HttpServletRequest request){
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .time(LocalDateTime.now())
@@ -48,11 +51,12 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .build();
-        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+        ApiResponse<ExceptionResponse> apiResponse = new ApiResponse<>(exceptionResponse);
+        return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponse> userAlreadyVerified(UserAlreadyVerifiedException e,
+    @ExceptionHandler(UserAlreadyVerifiedException.class)
+    public ResponseEntity<ApiResponse<ExceptionResponse>> userAlreadyVerified(UserAlreadyVerifiedException e,
                                                           HttpServletRequest request){
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .time(LocalDateTime.now())
@@ -60,11 +64,12 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .build();
-        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+        ApiResponse<ExceptionResponse> apiResponse = new ApiResponse<>(exceptionResponse);
+        return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
     }
 
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponse> userNotVerified(UserNotVerifiedException e,
+    @ExceptionHandler(UserNotVerifiedException.class)
+    public ResponseEntity<ApiResponse<ExceptionResponse>> userNotVerified(UserNotVerifiedException e,
                                                           HttpServletRequest request){
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .time(LocalDateTime.now())
@@ -72,10 +77,11 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .build();
-        return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+        ApiResponse<ExceptionResponse> apiResponse = new ApiResponse<>(exceptionResponse);
+        return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponse> badCredentials(BadCredentialsException e,
+    @ExceptionHandler(BadCredentialsException.class)
+    public ResponseEntity<ApiResponse<ExceptionResponse>> badCredentials(BadCredentialsException e,
                                                           HttpServletRequest request){
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .time(LocalDateTime.now())
@@ -83,10 +89,11 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .build();
-        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+        ApiResponse<ExceptionResponse> apiResponse = new ApiResponse<>(exceptionResponse);
+        return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponse> tokenNotFound(TokenNotFoundException e,
+    @ExceptionHandler(TokenNotFoundException.class)
+    public ResponseEntity<ApiResponse<ExceptionResponse>> tokenNotFound(TokenNotFoundException e,
                                                           HttpServletRequest request){
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .time(LocalDateTime.now())
@@ -94,10 +101,11 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .statusCode(HttpStatus.NOT_FOUND.value())
                 .build();
-        return new ResponseEntity<>(exceptionResponse,HttpStatus.NOT_FOUND);
+        ApiResponse<ExceptionResponse> apiResponse = new ApiResponse<>(exceptionResponse);
+        return new ResponseEntity<>(apiResponse,HttpStatus.NOT_FOUND);
     }
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponse> tokenExpired(TokenExpiredException e,
+    @ExceptionHandler(TokenExpiredException.class)
+    public ResponseEntity<ApiResponse<ExceptionResponse>> tokenExpired(TokenExpiredException e,
                                                           HttpServletRequest request){
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .time(LocalDateTime.now())
@@ -105,10 +113,11 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .statusCode(HttpStatus.BAD_REQUEST.value())
                 .build();
-        return new ResponseEntity<>(exceptionResponse,HttpStatus.BAD_REQUEST);
+        ApiResponse<ExceptionResponse> apiResponse = new ApiResponse<>(exceptionResponse);
+        return new ResponseEntity<>(apiResponse,HttpStatus.BAD_REQUEST);
     }
-    @ExceptionHandler
-    public ResponseEntity<ExceptionResponse> userUnauthorized(UserUnauthorizedException e,
+    @ExceptionHandler(UserUnauthorizedException.class)
+    public ResponseEntity<ApiResponse<ExceptionResponse>> userUnauthorized(UserUnauthorizedException e,
                                                           HttpServletRequest request){
         ExceptionResponse exceptionResponse = ExceptionResponse.builder()
                 .time(LocalDateTime.now())
@@ -116,6 +125,7 @@ public class GlobalExceptionHandler {
                 .path(request.getRequestURI())
                 .statusCode(HttpStatus.UNAUTHORIZED.value())
                 .build();
-        return new ResponseEntity<>(exceptionResponse,HttpStatus.UNAUTHORIZED);
+        ApiResponse<ExceptionResponse> apiResponse = new ApiResponse<>(exceptionResponse);
+        return new ResponseEntity<>(apiResponse,HttpStatus.UNAUTHORIZED);
     }
 }

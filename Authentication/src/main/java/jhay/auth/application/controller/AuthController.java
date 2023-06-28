@@ -1,6 +1,7 @@
 package jhay.auth.application.controller;
 
 import jakarta.validation.Valid;
+import jhay.auth.application.model.ApiResponse;
 import jhay.auth.application.model.LoginRequest;
 import jhay.auth.application.model.RegistrationRequest;
 import jhay.auth.application.model.AuthResponse;
@@ -21,33 +22,40 @@ public class AuthController {
     private final TokenValidationServiceImpl tokenService;
 
     @PostMapping("/register")
-    public ResponseEntity<String> registerNewUser(@Valid @RequestBody
+    public ResponseEntity<ApiResponse<String>> registerNewUser(@Valid @RequestBody
                                                                 RegistrationRequest registerRequest){
-        return new ResponseEntity<>(registrationService.registerUser(registerRequest), HttpStatus.CREATED);
+        ApiResponse<String> apiResponse = new ApiResponse<>(registrationService.registerUser(registerRequest));
+        return new ResponseEntity<>(apiResponse, HttpStatus.CREATED);
     }
     @GetMapping("/verify-email")
-    public ResponseEntity<String> verifyUserEmail(@RequestParam("token") String token){
-        return new ResponseEntity<>(tokenService.validateToken(token),HttpStatus.OK);
+    public ResponseEntity<ApiResponse<String>> verifyUserEmail(@RequestParam("token") String token){
+        ApiResponse<String> apiResponse = new ApiResponse<>(tokenService.validateToken(token));
+        return new ResponseEntity<>(apiResponse,HttpStatus.OK);
     }
     @GetMapping("/request-new-verification-token")
-    public ResponseEntity<String> requestNewToken(@RequestParam("email") String email){
-        return new ResponseEntity<>(tokenService.requestNewVerificationToken(email), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<String>> requestNewToken(@RequestParam("email") String email){
+        ApiResponse<String> apiResponse = new ApiResponse<>(tokenService.requestNewVerificationToken(email));
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @PostMapping("/login")
-    public ResponseEntity<AuthResponse> loginUser(@RequestBody LoginRequest loginRequest){
-        return new ResponseEntity<>(loginService.loginUser(loginRequest), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<AuthResponse>> loginUser(@RequestBody LoginRequest loginRequest){
+        ApiResponse<AuthResponse> apiResponse = new ApiResponse<>(loginService.loginUser(loginRequest));
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @PostMapping("/forgot-password")
-    public ResponseEntity<String> userForgotPassword(@RequestParam("email") String email){
-        return new ResponseEntity<>(loginService.forgotPassword(email), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<String>> userForgotPassword(@RequestParam("email") String email){
+        ApiResponse<String> apiResponse = new ApiResponse<>(loginService.forgotPassword(email));
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
     @PostMapping("/reset-password")
-    public ResponseEntity<String> resetPassword(@RequestParam("email") String email,
+    public ResponseEntity<ApiResponse<String>> resetPassword(@RequestParam("email") String email,
                                                 @RequestParam("password") String password){
-        return new ResponseEntity<>(loginService.resetPassword(email,password),HttpStatus.OK);
+        ApiResponse<String> apiResponse = new ApiResponse<>(loginService.resetPassword(email,password));
+        return new ResponseEntity<>(apiResponse,HttpStatus.OK);
     }
     @GetMapping("/verify-reset-password")
-    public ResponseEntity<String> verifyPasswordToken(@RequestParam("token") String token) {
-        return new ResponseEntity<>(tokenService.validatePasswordToken(token), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<String>> verifyPasswordToken(@RequestParam("token") String token) {
+        ApiResponse<String> apiResponse = new ApiResponse<>(tokenService.validatePasswordToken(token));
+        return new ResponseEntity<>(apiResponse, HttpStatus.OK);
     }
 }

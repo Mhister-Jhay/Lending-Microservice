@@ -1,6 +1,7 @@
 package org.jhay.application.controller;
 
 import lombok.RequiredArgsConstructor;
+import org.jhay.application.dto.ApiResponse;
 import org.jhay.application.dto.request.LoanRequest;
 import org.jhay.application.dto.response.LoanResponse;
 import org.jhay.domain.service.LoanService;
@@ -15,16 +16,19 @@ public class LoanController {
     private final LoanService loanService;
 
     @PostMapping("/request")
-    public ResponseEntity<LoanResponse> requestForLoan(@RequestBody LoanRequest request){
-        return new ResponseEntity<>(loanService.requestLoan(request), HttpStatus.CREATED);
+    public ResponseEntity<ApiResponse<LoanResponse>> requestForLoan(@RequestBody LoanRequest request){
+        ApiResponse<LoanResponse> response = new ApiResponse<>(loanService.requestLoan(request));
+        return new ResponseEntity<>(response, HttpStatus.CREATED);
     }
 
     @GetMapping("/view-loans/{loanId}")
-    public ResponseEntity<LoanResponse> viewLoan(@PathVariable Long loanId){
-        return new ResponseEntity<>(loanService.getLoan(loanId), HttpStatus.OK);
+    public ResponseEntity<ApiResponse<LoanResponse>> viewLoan(@PathVariable Long loanId){
+        ApiResponse<LoanResponse> response = new ApiResponse<>(loanService.getLoan(loanId));
+        return new ResponseEntity<>(response, HttpStatus.OK);
     }
     @PutMapping("/approve/{loanId}")
-    public ResponseEntity<LoanResponse> approveLoan(@PathVariable Long loanId){
-        return new ResponseEntity<>(loanService.approveLoan(loanId),HttpStatus.OK);
+    public ResponseEntity<ApiResponse<LoanResponse>> approveLoan(@PathVariable Long loanId){
+        ApiResponse<LoanResponse> response = new ApiResponse<>(loanService.approveLoan(loanId));
+        return new ResponseEntity<>(response,HttpStatus.OK);
     }
 }
