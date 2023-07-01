@@ -83,6 +83,7 @@ public class AccountApiServiceImpl implements AccountApiService, ApplicationRunn
         notificationService.sendAccountMessage(MessageResponse.builder()
                 .userId(user.getId())
                 .message("Account Saved Successfully")
+                .subAccountId(account.getId())
                 .build());
         return SaveAccountResponse.builder()
                 .message("Account Saved Successfully")

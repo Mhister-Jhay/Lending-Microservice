@@ -1,16 +1,16 @@
-package org.jhay.application.model.response;
+package org.jhay.application.dto.response;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
-@Data
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class MessageResponse {
-    private Long userId;
+@Data
+@Builder
+public class HistoryResponse {
+    private String type;
     private String message;
-    private String subAccountId;
+    private Integer time;
 }

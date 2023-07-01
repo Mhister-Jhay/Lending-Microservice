@@ -20,6 +20,7 @@ public class AddressEventHandler {
                 .orElseThrow(()-> new UserNotFoundException("User does not exist"));
         if(response.getMessage().equals("Address Saved Successfully")){
             user.setIsAddressSaved(true);
+            user.setSubAccountId(response.getSubAccountId());
             userRepository.save(user);
             System.out.println("Address Saved By User");
         }

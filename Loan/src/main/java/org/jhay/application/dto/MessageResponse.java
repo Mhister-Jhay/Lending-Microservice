@@ -8,4 +8,5 @@ import lombok.Data;
 public class MessageResponse {
     private Long userId;
     private String message;
+    private String subAccountId;
 }

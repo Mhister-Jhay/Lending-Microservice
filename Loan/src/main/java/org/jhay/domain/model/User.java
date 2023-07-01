@@ -26,6 +26,8 @@ public class User {
     private String email;
     @Column(unique = true,nullable = false)
     private String phoneNumber;
+    @Column(unique = true)
+    private String subAccountId;
     @Enumerated(EnumType.STRING)
     private Gender gender;
     @Column(nullable = false)
