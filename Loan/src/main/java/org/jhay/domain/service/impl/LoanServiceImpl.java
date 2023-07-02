@@ -64,7 +64,7 @@ public class LoanServiceImpl implements LoanService {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new UserNotFoundException("User Does not Exist"));
         if(!user.getIsAccountSaved() && !user.getIsAddressSaved() && !user.getIsEmploymentSaved()){
-            throw new ProfileNotCompleteException("Please Update Your Profile before Requesting for loan");
+            throw new ProfileNotCompleteException("Please Update Your Profile Before Approving Loan");
         }
         Loan loan = loanRepository.findById(loanId)
                 .orElseThrow(() -> new LoanNotFoundException("Loan does not exist"));
@@ -80,7 +80,7 @@ public class LoanServiceImpl implements LoanService {
                 .email(user.getEmail())
                 .amount(loan.getAmountBorrowed())
                 .subaccount(borrower.getSubAccountId())
-                .callback_url("http://localhost:8083/verify-payment")
+                .callback_url("http://localhost:8083/verify-transaction")
                 .build();
         PaymentResponse response = apiConnection.connectAndPost(paymentRequest,url,PaymentResponse.class);
         DataResponse data = response.getData();

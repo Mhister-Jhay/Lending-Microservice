@@ -32,8 +32,9 @@ public class LoanController {
         ApiResponse<DataResponse> response = new ApiResponse<>(loanService.approveLoan(loanId));
         return new ResponseEntity<>(response,HttpStatus.OK);
     }
-    @PostMapping("/verify-transaction")
-    public ResponseEntity<ApiResponse<LoanResponse>> verifyPayment(@RequestParam("reference") String reference){
+    @GetMapping("/verify-transaction")
+    public ResponseEntity<ApiResponse<LoanResponse>> verifyPayment(@RequestParam("reference") String reference,
+                                                                   @RequestParam("trxref") String transfer_reference){
         ApiResponse<LoanResponse> apiResponse = new ApiResponse<>(loanService.verifyPayment(reference));
         return new ResponseEntity<>(apiResponse,HttpStatus.OK);
     }

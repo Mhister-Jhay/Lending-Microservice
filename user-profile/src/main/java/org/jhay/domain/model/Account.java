@@ -20,7 +20,7 @@ public class Account {
     private String bankCode;
     @Column(nullable = false)
     private String accountName;
-    @Column(nullable = false,unique = true)
+    @Column(nullable = false)
     private String accountNumber;
     @Column(nullable = false)
     private String createdAt;
