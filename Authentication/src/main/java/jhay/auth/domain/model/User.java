@@ -3,6 +3,7 @@ package jhay.auth.domain.model;
 import jakarta.persistence.*;
 import jhay.auth.domain.enums.Gender;
 import jhay.auth.domain.enums.Role;
+import jhay.auth.domain.enums.UserType;
 import lombok.*;
 import org.hibernate.Hibernate;
 import org.hibernate.annotations.NaturalId;
@@ -42,23 +43,10 @@ public class User implements UserDetails {
     private Role role;
     @Enumerated(EnumType.STRING)
     private Gender gender;
+    @Enumerated(EnumType.STRING)
+    private UserType type;
     private Boolean isLocked = false;
     private Boolean isEnabled = false;
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || Hibernate.getClass(this) != Hibernate.getClass(o)) return false;
-        User user = (User) o;
-        return getId() != null && Objects.equals(getId(), user.getId())
-                && getEmail() != null && Objects.equals(getEmail(), user.getEmail());
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(email);
-    }
-
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         return Collections.singletonList(new SimpleGrantedAuthority(role.name()));

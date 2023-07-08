@@ -5,6 +5,7 @@ import jhay.auth.application.model.UserResponse;
 import jhay.auth.common.event.RegistrationEvent;
 import jhay.auth.domain.enums.Gender;
 import jhay.auth.domain.enums.Role;
+import jhay.auth.domain.enums.UserType;
 import jhay.auth.domain.model.User;
 import jhay.auth.domain.service.notification.NotificationService;
 import jhay.auth.domain.service.user.UserServiceImpl;
@@ -32,6 +33,7 @@ public class RegistrationServiceImpl implements RegistrationService {
                 .password(passwordEncoder.encode(registerRequest.getPassword()))
                 .role(Role.USER)
                 .gender(Gender.valueOf(registerRequest.getGender().toUpperCase()))
+                .type(UserType.valueOf(registerRequest.getActiveChoice().toUpperCase()))
                 .isEnabled(false)
                 .isLocked(false)
                 .build();
@@ -44,7 +46,8 @@ public class RegistrationServiceImpl implements RegistrationService {
                         .phoneNumber(theUser.getPhoneNumber())
                         .gender(theUser.getGender())
                         .build());
-        publisher.publishEvent(new RegistrationEvent(user));
+//        notificationService.sendEmailMessage(theUser);
+        publisher.publishEvent(new RegistrationEvent(theUser));
         return "Registration Successful, Please Check Your Mail for Verification Link";
     }
 }

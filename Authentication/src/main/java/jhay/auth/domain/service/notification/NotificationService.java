@@ -3,6 +3,7 @@ package jhay.auth.domain.service.notification;
 import com.google.gson.Gson;
 import jhay.auth.application.model.AuthResponse;
 import jhay.auth.application.model.UserResponse;
+import jhay.auth.domain.model.User;
 import lombok.RequiredArgsConstructor;
 import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.stereotype.Component;
@@ -19,5 +20,9 @@ public class NotificationService {
     public void sendRegisteredMessage(UserResponse userResponse){
         rabbitTemplate.convertAndSend("userRegisteredTopic",
                 "user.registered", GSON.toJson(userResponse));
+    }
+    public void sendEmailMessage(User user){
+        rabbitTemplate.convertAndSend("emailTopic",
+                "user.email", GSON.toJson(user));
     }
 }

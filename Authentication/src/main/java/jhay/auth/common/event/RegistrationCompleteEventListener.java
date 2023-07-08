@@ -27,7 +27,8 @@ public class RegistrationCompleteEventListener implements
         // 3. Save the token in the database
         tokenValidationService.saveVerificationToken(verifyToken,user);
         // 4. Build the verification link for the user
-        String url = "http://localhost:8080/auth/verify-email?token="+verifyToken;
+        String url = "http://localhost:5173/verify-email?token="+verifyToken;
+//        String url = "http://localhost:8080/auth/verify-email?token="+verifyToken;
         // 5. Actually send the mail
         try {
             sendVerificationEmail(url,user);

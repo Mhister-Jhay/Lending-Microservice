@@ -5,6 +5,7 @@ import jhay.auth.common.exception.TokenNotFoundException;
 import jhay.auth.common.exception.UserAlreadyVerifiedException;
 import jhay.auth.domain.model.User;
 import jhay.auth.domain.model.VerificationToken;
+import jhay.auth.domain.repository.UserRepository;
 import jhay.auth.domain.service.user.UserServiceImpl;
 import jhay.auth.domain.repository.VerificationTokenRepository;
 import lombok.RequiredArgsConstructor;
@@ -19,6 +20,7 @@ import java.util.Date;
 public class TokenValidationServiceImpl implements TokenValidationService{
     private final VerificationTokenRepository tokenRepository;
     private final UserServiceImpl userService;
+    private final UserRepository userRepository;
     private final ApplicationEventPublisher publisher;
     @Transactional
     @Override
@@ -36,6 +38,7 @@ public class TokenValidationServiceImpl implements TokenValidationService{
                     "http://localhost:8080/auth/request-new-verification-token?email="+user.getEmail();
         }
         user.setIsEnabled(true);
+        userRepository.save(user);
         if(user.getIsEnabled()){
             return "Email Verified Successfully, Please proceed to Login.";
         }else{
@@ -83,6 +86,7 @@ public class TokenValidationServiceImpl implements TokenValidationService{
 
     public void saveVerificationToken(String token, User user){
         VerificationToken verificationToken = new VerificationToken(token,user);
+        System.out.println(verificationToken);
         tokenRepository.save(verificationToken);
     }
 }

@@ -19,7 +19,7 @@ public class UserServiceImpl implements UserService{
     public User getUserByEmail(String email){
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if(optionalUser.isEmpty()){
-            throw new UserNotFoundException(email);
+            throw new UserNotFoundException("User does not exist, Please register");
         }else{
             return optionalUser.get();
         }
@@ -28,7 +28,7 @@ public class UserServiceImpl implements UserService{
     public void verifyUserExistence(String email){
         Optional<User> optionalUser = userRepository.findByEmail(email);
         if(optionalUser.isPresent()){
-            throw new UserAlreadyExistException(email);
+            throw new UserAlreadyExistException("User already exists, Please login");
         }
     }
     @Override
